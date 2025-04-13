@@ -123,27 +123,36 @@ export default function FeaturedFacilities() {
   }).slice(0, 4); // Show only first 4 after filtering
   
   return (
-    <section className="py-24 bg-gray-50">
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+    <section className="py-24 bg-gradient-to-br from-gray-50 to-blue-50 relative overflow-hidden">
+      {/* Background patterns */}
+      <div className="absolute inset-0 bg-sports-dots opacity-40"></div>
+      
+      {/* Decorative blobs */}
+      <div className="absolute -top-20 -left-20 w-96 h-96 bg-blue-200 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob"></div>
+      <div className="absolute -bottom-20 -right-20 w-96 h-96 bg-purple-200 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob animation-delay-2000"></div>
+      
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 relative">
         <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-12">
           <div className="mb-6 md:mb-0">
+            <span className="px-3 py-1 rounded-full text-xs font-semibold bg-primary-100 text-primary-800 inline-block mb-4">TOP RATED</span>
             <h2 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
               Featured Facilities
             </h2>
-            <p className="mt-2 text-lg text-gray-600 max-w-2xl">
+            <div className="mt-4 w-20 h-1 bg-primary-600 rounded"></div>
+            <p className="mt-4 text-lg text-gray-600 max-w-2xl">
               Discover top-rated sports facilities across Sri Lanka
             </p>
           </div>
           
-          <div className="flex flex-wrap gap-2">
+          <div className="flex flex-wrap gap-2 bg-white/70 backdrop-blur-sm p-2 rounded-xl shadow-sm">
             {filters.map((filter) => (
               <button
                 key={filter.id}
                 onClick={() => setActiveFilter(filter.id)}
                 className={`
-                  px-4 py-2 text-sm font-medium rounded-full transition-all duration-200
+                  px-4 py-2 text-sm font-medium rounded-full transition-all duration-300
                   ${activeFilter === filter.id 
-                    ? 'bg-primary-100 text-primary-800 shadow-sm' 
+                    ? 'bg-primary-100 text-primary-800 shadow-sm transform scale-105' 
                     : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100'}
                 `}
               >
@@ -164,13 +173,16 @@ export default function FeaturedFacilities() {
             >
               <div 
                 className={`
-                  relative overflow-hidden rounded-xl shadow-sm transition-all duration-300 flex-grow
-                  ${hoveredId === facility.id ? 'shadow-lg scale-[1.02]' : ''}
+                  relative overflow-hidden rounded-xl shadow-md transition-all duration-500 flex-grow
+                  ${hoveredId === facility.id ? 'shadow-lg shadow-primary-200/50 scale-[1.03]' : ''}
                 `}
               >
                 {facility.isNew && (
                   <div className="absolute top-4 left-4 z-20">
-                    <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                    <span className="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800 ring-2 ring-green-100/50 shadow-sm">
+                      <svg xmlns="http://www.w3.org/2000/svg" className="h-3 w-3 mr-1" viewBox="0 0 20 20" fill="currentColor">
+                        <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-11a1 1 0 10-2 0v3.586L7.707 9.293a1 1 0 00-1.414 1.414l3 3a1 1 0 001.414 0l3-3a1 1 0 00-1.414-1.414L11 10.586V7z" clipRule="evenodd" />
+                      </svg>
                       New
                     </span>
                   </div>
@@ -178,8 +190,8 @@ export default function FeaturedFacilities() {
                 
                 {facility.premium && (
                   <div className="absolute top-4 right-4 z-20">
-                    <span className="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-amber-100 text-amber-800">
-                      <svg xmlns="http://www.w3.org/2000/svg" className="h-3.5 w-3.5 mr-1" viewBox="0 0 20 20" fill="currentColor">
+                    <span className="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-amber-100 text-amber-800 ring-2 ring-amber-100/50 shadow-sm">
+                      <svg xmlns="http://www.w3.org/2000/svg" className="h-3.5 w-3.5 mr-1 animate-pulse-slow" viewBox="0 0 20 20" fill="currentColor">
                         <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118l-2.8-2.034c-.783-.57-.38-1.81.588-1.81h3.462a1 1 0 00.95-.69l1.07-3.292z" />
                       </svg>
                       Premium
@@ -187,15 +199,15 @@ export default function FeaturedFacilities() {
                   </div>
                 )}
                 
-                <div className="aspect-w-16 aspect-h-9 w-full">
+                <div className="aspect-w-16 aspect-h-9 w-full shine-effect">
                   <div 
                     className="h-full w-full bg-cover bg-center transition-transform duration-700 group-hover:scale-110"
                     style={{ backgroundImage: `url(${facility.image})` }}
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-gray-900/80 via-gray-900/40 to-transparent" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-gray-900/90 via-gray-900/60 to-transparent" />
                 </div>
 
-                <div className="absolute bottom-0 left-0 right-0 p-4 text-white">
+                <div className="absolute bottom-0 left-0 right-0 p-5 text-white backdrop-blur-sm bg-black/20 group-hover:bg-black/30 transition-all duration-300">
                   <h3 className="text-lg font-bold mb-1">{facility.name}</h3>
                   <div className="flex items-center text-sm mb-2">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-4 h-4 text-amber-400">
@@ -215,19 +227,20 @@ export default function FeaturedFacilities() {
                   
                   <div className="flex flex-wrap gap-1 mb-3">
                     {facility.sportTypes.map((sport) => (
-                      <span key={sport} className="inline-block rounded-full bg-white/20 backdrop-blur-sm px-2 py-0.5 text-xs font-medium">
+                      <span key={sport} className="inline-block rounded-full bg-white/20 backdrop-blur-sm px-2.5 py-0.5 text-xs font-medium ring-1 ring-white/10">
                         {sport}
                       </span>
                     ))}
                   </div>
                   
-                  <div className="flex items-center justify-between">
-                    <span className="font-medium">{facility.price}</span>
+                  <div className="flex items-center justify-between mt-2">
+                    <span className="font-medium bg-primary-600/90 px-3 py-1 rounded-lg text-sm">{facility.price}</span>
                     
                     <span 
                       className={`
-                        flex items-center text-sm transition-all duration-300 transform
-                        ${hoveredId === facility.id ? 'translate-x-0 opacity-100' : 'translate-x-4 opacity-0'}
+                        flex items-center text-sm bg-white/10 backdrop-blur-sm px-3 py-1 rounded-lg
+                        transition-all duration-500 transform
+                        ${hoveredId === facility.id ? 'translate-x-0 opacity-100' : 'translate-x-8 opacity-0'}
                       `}
                     >
                       Book now
@@ -254,11 +267,11 @@ export default function FeaturedFacilities() {
         <div className="mt-16 text-center">
           <Link
             href="/facilities"
-            className="inline-flex items-center rounded-md border border-primary-600 px-6 py-3 text-base font-medium text-primary-600 shadow-sm hover:bg-primary-50 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 transition-colors duration-200"
+            className="inline-flex items-center rounded-lg border border-primary-600 px-6 py-3 text-base font-medium text-primary-600 shadow-sm hover:bg-primary-50 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 transition-all duration-300 group relative overflow-hidden"
           >
-            View All Facilities
+            <span className="relative z-10">View All Facilities</span>
             <svg 
-              className="ml-2 -mr-0.5 h-4 w-4" 
+              className="ml-2 -mr-0.5 h-5 w-5 transition-transform duration-300 group-hover:translate-x-1 relative z-10" 
               xmlns="http://www.w3.org/2000/svg" 
               viewBox="0 0 20 20" 
               fill="currentColor"
@@ -269,6 +282,7 @@ export default function FeaturedFacilities() {
                 clipRule="evenodd" 
               />
             </svg>
+            <span className="absolute inset-0 bg-primary-50 transform scale-x-0 origin-left transition-transform duration-300 group-hover:scale-x-100"></span>
           </Link>
         </div>
       </div>

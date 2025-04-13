@@ -83,25 +83,34 @@ export default function SportCategories() {
   
   return (
     <section className="bg-white py-24 relative overflow-hidden">
-      {/* Decorative background */}
-      <div className="absolute inset-0 bg-grid-gray-100 bg-center [mask-image:radial-gradient(ellipse_at_center,transparent_20%,white)]"></div>
+      {/* Geometric pattern background */}
+      <div className="absolute inset-0 bg-field-lines opacity-40"></div>
       
-      {/* Decorative elements */}
-      <div className="absolute top-10 left-10 w-72 h-72 bg-primary-100 rounded-full mix-blend-multiply filter blur-3xl opacity-10 animate-blob"></div>
-      <div className="absolute top-10 right-10 w-72 h-72 bg-secondary-100 rounded-full mix-blend-multiply filter blur-3xl opacity-10 animate-blob animation-delay-2000"></div>
-      <div className="absolute -bottom-10 left-1/3 w-72 h-72 bg-accent-100 rounded-full mix-blend-multiply filter blur-3xl opacity-10 animate-blob animation-delay-4000"></div>
+      {/* Decorative elements - animated blobs */}
+      <div className="absolute top-20 left-20 w-96 h-96 bg-primary-100 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob"></div>
+      <div className="absolute top-20 right-20 w-96 h-96 bg-secondary-100 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob animation-delay-2000"></div>
+      <div className="absolute -bottom-32 left-1/3 w-96 h-96 bg-accent-100 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob animation-delay-4000"></div>
+      
+      {/* Sports equipment outline decorations */}
+      <div className="absolute top-10 right-40 w-20 h-20 border-2 border-primary-200 rounded-full opacity-20 animate-float"></div>
+      <div className="absolute bottom-20 left-40 w-16 h-16 border-2 border-primary-200 rounded-full opacity-20 animate-float animation-delay-2000"></div>
+      <div className="absolute bottom-40 right-96 w-24 h-8 border-2 border-primary-200 rounded-full opacity-20 animate-float animation-delay-1000"></div>
       
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 relative">
-        <div className="text-center">
-          <h2 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
+        <div className="text-center mb-16">
+          <span className="px-3 py-1 rounded-full text-xs font-semibold bg-primary-100 text-primary-800 inline-block mb-4 animate-pulse-slow">EXPLORE FACILITIES</span>
+          <h2 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-5xl animate-fade-in-down">
             Browse by Sport Category
           </h2>
-          <p className="mt-4 text-xl text-gray-600 max-w-3xl mx-auto">
+          <div className="flex justify-center mt-4">
+            <div className="w-20 h-1 bg-primary-600 rounded"></div>
+          </div>
+          <p className="mt-6 text-xl text-gray-600 max-w-3xl mx-auto animate-fade-in-up">
             Find the perfect facility for your favorite sport
           </p>
         </div>
 
-        <div className="mt-16 grid grid-cols-1 gap-y-8 gap-x-8 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="grid grid-cols-1 gap-y-8 gap-x-8 sm:grid-cols-2 lg:grid-cols-3">
           {categories.map((category) => (
             <Link
               key={category.id}
@@ -112,11 +121,11 @@ export default function SportCategories() {
             >
               <div 
                 className={`
-                  overflow-hidden rounded-xl shadow-md transition-all duration-300 
-                  ${hoveredId === category.id ? 'shadow-xl scale-[1.02]' : ''}
+                  overflow-hidden rounded-xl shadow-md transition-all duration-500 
+                  ${hoveredId === category.id ? 'shadow-xl scale-[1.03] shadow-primary-200/50' : 'shadow-gray-200/60'}
                 `}
               >
-                <div className="aspect-h-2 aspect-w-3 h-60 relative">
+                <div className="aspect-h-2 aspect-w-3 h-64 relative shine-effect">
                   <div 
                     className="h-full w-full bg-cover bg-center transition-transform duration-700 group-hover:scale-110"
                     style={{ backgroundImage: `url(${category.imageSrc})` }}
@@ -124,25 +133,26 @@ export default function SportCategories() {
                   <div className="absolute inset-0 bg-gradient-to-t from-primary-950/90 via-primary-900/50 to-transparent" />
                   
                   <div className="absolute inset-0 flex items-end p-6 text-white">
-                    <div>
-                      <div className="flex items-center space-x-2 mb-3">
-                        <div className="p-2 bg-primary-500/30 rounded-lg backdrop-blur-sm">
+                    <div className="w-full">
+                      <div className="flex items-center space-x-3 mb-3">
+                        <div className="p-2.5 bg-primary-500/30 rounded-lg backdrop-blur-sm group-hover:bg-primary-500/50 transition-all duration-300 animate-bounce-subtle">
                           {category.icon}
                         </div>
-                        <h3 className="text-xl font-bold">{category.name}</h3>
+                        <h3 className="text-2xl font-bold">{category.name}</h3>
                       </div>
-                      <p className="text-sm text-white/90 max-w-xs">{category.description}</p>
+                      <p className="text-sm text-white/90 max-w-xs mb-4">{category.description}</p>
                       
                       <div 
                         className={`
-                          mt-4 inline-flex items-center text-sm font-medium text-white
+                          inline-flex items-center px-3 py-1.5 text-sm font-medium text-white
+                          bg-white/10 backdrop-blur-sm rounded-lg
                           transition-all duration-300 transform
                           ${hoveredId === category.id ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-4'}
                         `}
                       >
                         Browse facilities
                         <svg 
-                          className="ml-1 h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" 
+                          className="ml-1.5 h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" 
                           xmlns="http://www.w3.org/2000/svg" 
                           viewBox="0 0 20 20" 
                           fill="currentColor"
@@ -165,11 +175,11 @@ export default function SportCategories() {
         <div className="mt-16 text-center">
           <Link
             href="/facilities"
-            className="inline-flex items-center rounded-md border border-transparent bg-primary-600 px-6 py-3 text-base font-medium text-white shadow-sm hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 transition-colors duration-200"
+            className="inline-flex items-center rounded-md border border-transparent bg-primary-600 px-6 py-3 text-base font-medium text-white shadow-md hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 transition-all duration-300 hover:scale-105"
           >
             View All Sports
             <svg 
-              className="ml-2 -mr-0.5 h-4 w-4" 
+              className="ml-2 -mr-0.5 h-5 w-5 transition-transform group-hover:translate-x-1" 
               xmlns="http://www.w3.org/2000/svg" 
               viewBox="0 0 20 20" 
               fill="currentColor"

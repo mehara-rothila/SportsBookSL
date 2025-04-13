@@ -102,16 +102,28 @@ export default function TestimonialSlider() {
   };
   
   return (
-    <section className="py-24 bg-gradient-to-br from-primary-900 to-primary-700 overflow-hidden">
+    <section className="py-24 bg-gradient-to-br from-primary-900 to-primary-700 relative overflow-hidden">
+      {/* Sports-themed background elements */}
+      <div className="absolute inset-0 bg-sports-pattern opacity-10"></div>
+      
+      {/* Decorative elements */}
+      <div className="absolute -top-40 -left-40 w-96 h-96 bg-white rounded-full opacity-5"></div>
+      <div className="absolute -bottom-40 -right-40 w-96 h-96 bg-white rounded-full opacity-5"></div>
+      
+      {/* Sports equipment outline decorations */}
+      <div className="absolute top-20 right-20 w-20 h-20 border-2 border-white/20 rounded-full opacity-20 animate-float"></div>
+      <div className="absolute bottom-20 left-40 w-16 h-16 border-2 border-white/20 rounded-full opacity-20 animate-float animation-delay-2000"></div>
+      <div className="absolute top-40 left-96 w-24 h-8 border-2 border-white/20 rounded-full opacity-20 animate-float animation-delay-1000"></div>
+      
       <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        {/* Decorative elements */}
-        <div className="absolute -top-20 -left-20 w-72 h-72 bg-white rounded-full opacity-5"></div>
-        <div className="absolute -bottom-20 -right-20 w-96 h-96 bg-white rounded-full opacity-5"></div>
-        
         <div className="text-center">
+          <span className="px-3 py-1 rounded-full text-xs font-semibold bg-white/10 text-white inline-block mb-4 backdrop-blur-sm">TESTIMONIALS</span>
           <h2 className="text-3xl font-bold tracking-tight text-white sm:text-4xl">
             What our users say
           </h2>
+          <div className="flex justify-center mt-4 mb-6">
+            <div className="w-20 h-1 bg-secondary-500 rounded"></div>
+          </div>
           <p className="mt-3 max-w-2xl mx-auto text-lg text-white/80">
             Hear from athletes, coaches, and facility owners who are transforming Sri Lanka's sports scene
           </p>
@@ -122,7 +134,7 @@ export default function TestimonialSlider() {
           <div className="absolute left-0 top-1/2 -translate-y-1/2 z-30 md:-left-6">
             <button 
               onClick={prevSlide}
-              className="bg-white/10 hover:bg-white/20 text-white rounded-full p-2 backdrop-blur-sm transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-white/20"
+              className="bg-white/10 hover:bg-white/20 text-white rounded-full p-3 backdrop-blur-sm transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-white/20 transform hover:scale-110 shadow-lg"
               aria-label="Previous testimonial"
             >
               <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -134,7 +146,7 @@ export default function TestimonialSlider() {
           <div className="absolute right-0 top-1/2 -translate-y-1/2 z-30 md:-right-6">
             <button 
               onClick={nextSlide}
-              className="bg-white/10 hover:bg-white/20 text-white rounded-full p-2 backdrop-blur-sm transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-white/20"
+              className="bg-white/10 hover:bg-white/20 text-white rounded-full p-3 backdrop-blur-sm transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-white/20 transform hover:scale-110 shadow-lg"
               aria-label="Next testimonial"
             >
               <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -144,30 +156,36 @@ export default function TestimonialSlider() {
           </div>
           
           {/* Testimonial Slider */}
-          <div className="relative h-[400px] md:h-[350px] mx-auto max-w-4xl">
+          <div className="relative h-[420px] md:h-[380px] mx-auto max-w-4xl">
             {testimonials.map((testimonial, index) => (
               <div
                 key={testimonial.id}
                 className={`absolute inset-0 transition-all duration-500 ease-in-out ${getSlideClass(index)}`}
               >
-                <div className="h-full flex flex-col md:flex-row items-center bg-white rounded-2xl shadow-xl overflow-hidden">
+                <div className="h-full flex flex-col md:flex-row items-center bg-white rounded-2xl shadow-2xl overflow-hidden">
                   {/* Image Column (hidden on mobile) */}
-                  <div className="hidden md:block md:w-1/3 h-full bg-primary-100">
-                    <div className="h-full relative">
-                      <div 
-                        className="absolute inset-0 bg-cover bg-center"
-                        style={{ backgroundImage: `url(${testimonial.imageUrl})` }}
-                      />
-                      <div className="absolute inset-0 bg-gradient-to-r from-primary-200/80 to-transparent" />
-                    </div>
+                  <div className="hidden md:block md:w-2/5 h-full bg-primary-100 relative overflow-hidden">
+                    <div 
+                      className="absolute inset-0 bg-cover bg-center animate-ken-burns"
+                      style={{ backgroundImage: `url(${testimonial.imageUrl})` }}
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-r from-primary-300/80 to-transparent" />
+                    
+                    {/* Sport-themed decorative elements */}
+                    <div className="absolute top-4 left-4 w-16 h-16 border-2 border-primary-300 rounded-full opacity-20"></div>
+                    <div className="absolute bottom-4 right-4 w-12 h-12 border-2 border-primary-300 rounded-full opacity-20"></div>
+                    <div className="absolute top-1/3 right-1/3 w-16 h-4 border-2 border-primary-300 rounded-full opacity-20"></div>
                   </div>
                   
                   {/* Content */}
-                  <div className="p-8 md:p-10 md:w-2/3 flex flex-col justify-center">
+                  <div className="p-8 md:p-10 md:w-3/5 flex flex-col justify-center">
                     {/* Quote mark */}
-                    <svg className="h-10 w-10 text-primary-200 mb-4" fill="currentColor" viewBox="0 0 32 32">
-                      <path d="M9.352 4C4.456 7.456 1 13.12 1 19.36c0 5.088 3.072 8.064 6.624 8.064 3.36 0 5.856-2.688 5.856-5.856 0-3.168-2.208-5.472-5.088-5.472-.576 0-1.344.096-1.536.192.48-3.264 3.552-7.104 6.624-9.024L9.352 4zm16.512 0c-4.8 3.456-8.256 9.12-8.256 15.36 0 5.088 3.072 8.064 6.624 8.064 3.264 0 5.856-2.688 5.856-5.856 0-3.168-2.304-5.472-5.184-5.472-.576 0-1.248.096-1.44.192.48-3.264 3.456-7.104 6.528-9.024L25.864 4z" />
-                    </svg>
+                    <div className="relative mb-6">
+                      <svg className="h-12 w-12 text-primary-200 absolute -top-4 -left-2" fill="currentColor" viewBox="0 0 32 32">
+                        <path d="M9.352 4C4.456 7.456 1 13.12 1 19.36c0 5.088 3.072 8.064 6.624 8.064 3.36 0 5.856-2.688 5.856-5.856 0-3.168-2.208-5.472-5.088-5.472-.576 0-1.344.096-1.536.192.48-3.264 3.552-7.104 6.624-9.024L9.352 4zm16.512 0c-4.8 3.456-8.256 9.12-8.256 15.36 0 5.088 3.072 8.064 6.624 8.064 3.264 0 5.856-2.688 5.856-5.856 0-3.168-2.304-5.472-5.184-5.472-.576 0-1.248.096-1.44.192.48-3.264 3.456-7.104 6.528-9.024L25.864 4z" />
+                      </svg>
+                      <div className="h-1 w-16 bg-primary-500 rounded-full ml-10 mb-4"></div>
+                    </div>
                     
                     <p className="text-lg md:text-xl text-gray-700 leading-relaxed italic">"{testimonial.content}"</p>
                     
@@ -182,7 +200,16 @@ export default function TestimonialSlider() {
                       </div>
                     </div>
                     
-                    <div className="mt-6 flex items-center">
+                    <div className="mt-8 flex items-center">
+                      <div className="mr-4 hidden md:block">
+                        <div className="h-12 w-12 rounded-full overflow-hidden ring-4 ring-primary-100">
+                          <img
+                            src={testimonial.imageUrl}
+                            alt={testimonial.author}
+                            className="h-full w-full object-cover"
+                          />
+                        </div>
+                      </div>
                       <div>
                         <div className="text-lg font-semibold text-gray-900">{testimonial.author}</div>
                         <div className="text-primary-600">{testimonial.role}</div>
@@ -195,7 +222,7 @@ export default function TestimonialSlider() {
           </div>
           
           {/* Pagination dots */}
-          <div className="flex justify-center space-x-2 mt-8">
+          <div className="flex justify-center space-x-2 mt-10">
             {testimonials.map((_, index) => (
               <button
                 key={index}
@@ -205,16 +232,24 @@ export default function TestimonialSlider() {
                   setIsTransitioning(true);
                   setCurrentIndex(index);
                 }}
-                className={`h-2.5 w-2.5 rounded-full transition-all duration-300 ${
+                className={`h-3 transition-all duration-300 rounded-full ${
                   currentIndex === index 
-                    ? 'bg-white w-6' 
-                    : 'bg-white/50 hover:bg-white/70'
+                    ? 'bg-white w-8' 
+                    : 'bg-white/50 hover:bg-white/70 w-3'
                 }`}
                 aria-label={`Go to slide ${index + 1}`}
               />
             ))}
           </div>
         </div>
+      </div>
+      
+      {/* Background decoration - stylized sports court lines */}
+      <div className="absolute bottom-0 left-0 w-full h-24 overflow-hidden opacity-10">
+        <div className="w-full h-px bg-white"></div>
+        <div className="absolute bottom-12 left-1/2 w-24 h-24 border-4 border-white rounded-full transform -translate-x-1/2"></div>
+        <div className="absolute bottom-0 left-1/4 w-px h-24 bg-white"></div>
+        <div className="absolute bottom-0 right-1/4 w-px h-24 bg-white"></div>
       </div>
     </section>
   );
