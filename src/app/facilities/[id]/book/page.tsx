@@ -10,6 +10,8 @@ import EquipmentRental from '../../../../components/equipment/EquipmentRental';
 import TransportationBooking from '@/components/transportation/TransportationBooking';
 import WeatherWidget from '@/components/weather/WeatherWidget';
 
+
+
 // Mock facility data
 const facilityData = {
   id: 'premadasa-cricket-stadium',
