@@ -1,12 +1,10 @@
-// src/app/bookings/confirmation/page.tsx
-
 'use client';
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { CheckCircleIcon, CalendarIcon, MapPinIcon, TruckIcon, TicketIcon } from '@heroicons/react/24/outline';
+import { CheckCircleIcon, CalendarIcon, MapPinIcon, TruckIcon, TicketIcon, InformationCircleIcon, ArrowRightIcon } from '@heroicons/react/24/outline'; // Added InformationCircleIcon, ArrowRightIcon
 
-// Mock booking data
+// Mock booking data (same as before)
 const bookingData = {
   id: 'BOOK-12345',
   facilityName: 'Premadasa Cricket Stadium',
@@ -25,184 +23,197 @@ const bookingData = {
 export default function BookingConfirmationPage() {
   const [timeRemaining, setTimeRemaining] = useState<{ hours: number; minutes: number; seconds: number }>({ hours: 0, minutes: 0, seconds: 0 });
   const [isExpired, setIsExpired] = useState(false);
-  
-  // Calculate countdown to booking date
+
+  // Calculate countdown (same logic as before)
   useEffect(() => {
     const calculateTimeRemaining = () => {
       const bookingDateTime = new Date(bookingData.date + 'T' + bookingData.time.split('-')[0] + ':00');
       const now = new Date();
       const difference = bookingDateTime.getTime() - now.getTime();
-      
+
       if (difference <= 0) {
         setIsExpired(true);
         return { hours: 0, minutes: 0, seconds: 0 };
       }
-      
+
       const days = Math.floor(difference / (1000 * 60 * 60 * 24));
       const hours = Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
       const minutes = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
       const seconds = Math.floor((difference % (1000 * 60)) / 1000);
-      
-      return { 
-        hours: days * 24 + hours, 
-        minutes, 
-        seconds 
+
+      return {
+        hours: days * 24 + hours,
+        minutes,
+        seconds
       };
     };
-    
+
     const timer = setInterval(() => {
       setTimeRemaining(calculateTimeRemaining());
     }, 1000);
-    
-    setTimeRemaining(calculateTimeRemaining());
-    
+
+    setTimeRemaining(calculateTimeRemaining()); // Initial calculation
+
     return () => clearInterval(timer);
   }, []);
-  
+
+  // Helper to format numbers with leading zeros
+  const formatTime = (num: number) => num.toString().padStart(2, '0');
+
   return (
-    <div className="bg-gray-50 min-h-screen py-16">
+    // Enhanced background and padding
+    <div className="bg-gradient-to-b from-gray-50 to-blue-50 min-h-screen py-20 sm:py-24">
       <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="bg-white rounded-lg shadow-lg overflow-hidden">
-          <div className="bg-primary-600 py-8 px-6 text-center">
-            <CheckCircleIcon className="mx-auto h-16 w-16 text-white mb-4" />
-            <h1 className="text-3xl font-bold text-white">Booking Confirmed!</h1>
-            <p className="mt-2 text-primary-100">Your facility booking has been successfully processed</p>
+        {/* Enhanced main card */}
+        <div className="bg-white rounded-2xl shadow-xl overflow-hidden border border-gray-200/75">
+          {/* Enhanced Header Section */}
+          <div className="bg-gradient-to-br from-primary-600 to-primary-700 py-10 px-6 text-center relative overflow-hidden">
+             {/* Subtle background pattern */}
+            <div className="absolute inset-0 opacity-10">
+              <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg"><defs><pattern id="dotted-pattern" x="0" y="0" width="10" height="10" patternUnits="userSpaceOnUse"><circle cx="1" cy="1" r="1" fill="white"></circle></pattern></defs><rect width="100%" height="100%" fill="url(#dotted-pattern)"></rect></svg>
+            </div>
+            <CheckCircleIcon className="relative mx-auto h-20 w-20 text-white mb-5 animate-pulse" /> {/* Added subtle pulse */}
+            <h1 className="relative text-4xl font-bold text-white tracking-tight">Booking Confirmed!</h1>
+            <p className="relative mt-3 text-lg text-primary-100/90">
+              Your facility booking is secured. Get ready for your session!
+            </p>
           </div>
-          
-          <div className="p-8">
-            <div className="bg-gray-50 rounded-lg p-6 mb-6">
-              <div className="flex justify-between items-center mb-4">
-                <h2 className="text-xl font-bold text-gray-900">Booking Details</h2>
-                <span className="text-sm font-medium bg-primary-100 text-primary-800 py-1 px-2 rounded-full">
-                  {bookingData.id}
+
+          {/* Enhanced Content Padding */}
+          <div className="p-8 md:p-10 space-y-8">
+            {/* Enhanced Booking Details Section */}
+            <div>
+              <div className="flex flex-col sm:flex-row justify-between sm:items-center mb-6 pb-4 border-b border-gray-200">
+                <h2 className="text-2xl font-semibold text-gray-900 mb-2 sm:mb-0">Booking Details</h2>
+                <span className="text-xs font-semibold bg-primary-100 text-primary-800 py-1.5 px-3 rounded-full uppercase tracking-wider self-start sm:self-center">
+                  ID: {bookingData.id}
                 </span>
               </div>
-              
-              <div className="space-y-4">
+
+              <div className="space-y-6">
+                {/* Detail Item Structure */}
                 <div className="flex items-start">
-                  <CalendarIcon className="h-6 w-6 text-primary-600 mt-0.5 flex-shrink-0" />
-                  <div className="ml-3">
-                    <p className="text-sm font-medium text-gray-900">Date & Time</p>
-                    <p className="text-sm text-gray-500">
+                  <CalendarIcon className="h-6 w-6 text-primary-600 mt-1 flex-shrink-0 mr-4" />
+                  <div>
+                    <p className="text-base font-medium text-gray-800">Date & Time</p>
+                    <p className="text-sm text-gray-600">
                       {new Date(bookingData.date).toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}
                     </p>
-                    <p className="text-sm text-gray-500">{bookingData.time}</p>
+                    <p className="text-sm text-gray-600">{bookingData.time}</p>
                   </div>
                 </div>
-                
+
                 <div className="flex items-start">
-                  <MapPinIcon className="h-6 w-6 text-primary-600 mt-0.5 flex-shrink-0" />
-                  <div className="ml-3">
-                    <p className="text-sm font-medium text-gray-900">Facility</p>
-                    <p className="text-sm text-gray-500">{bookingData.facilityName}</p>
-                    <p className="text-sm text-gray-500">{bookingData.facilityAddress}</p>
+                  <MapPinIcon className="h-6 w-6 text-primary-600 mt-1 flex-shrink-0 mr-4" />
+                  <div>
+                    <p className="text-base font-medium text-gray-800">Facility</p>
+                    <p className="text-sm text-gray-600 font-semibold">{bookingData.facilityName}</p>
+                    <p className="text-sm text-gray-600">{bookingData.facilityAddress}</p>
                   </div>
                 </div>
-                
+
                 {bookingData.equipment.length > 0 && (
                   <div className="flex items-start">
-                    <TicketIcon className="h-6 w-6 text-primary-600 mt-0.5 flex-shrink-0" />
-                    <div className="ml-3">
-                      <p className="text-sm font-medium text-gray-900">Equipment</p>
-                      <ul className="text-sm text-gray-500">
+                    <TicketIcon className="h-6 w-6 text-primary-600 mt-1 flex-shrink-0 mr-4" />
+                    <div>
+                      <p className="text-base font-medium text-gray-800">Equipment Rented</p>
+                      <ul className="text-sm text-gray-600 list-disc list-inside mt-1">
                         {bookingData.equipment.map((item, index) => (
-                          <li key={index}>{item.name} × {item.quantity}</li>
+                          <li key={index}>{item.name} <span className="text-gray-500">(Qty: {item.quantity})</span></li>
                         ))}
                       </ul>
                     </div>
                   </div>
                 )}
-                
+
                 {bookingData.hasTransportation && (
                   <div className="flex items-start">
-                    <TruckIcon className="h-6 w-6 text-primary-600 mt-0.5 flex-shrink-0" />
-                    <div className="ml-3">
-                      <p className="text-sm font-medium text-gray-900">Transportation</p>
-                      <p className="text-sm text-gray-500">Round-trip transportation included</p>
-                      <p className="text-sm text-gray-500">Driver details will be shared before your booking date</p>
+                    <TruckIcon className="h-6 w-6 text-primary-600 mt-1 flex-shrink-0 mr-4" />
+                    <div>
+                      <p className="text-base font-medium text-gray-800">Transportation</p>
+                      <p className="text-sm text-gray-600">Round-trip transportation included.</p>
+                      <p className="text-xs text-gray-500 mt-1">Driver details will be shared closer to the booking date.</p>
                     </div>
                   </div>
                 )}
               </div>
-              
-              <div className="mt-6 pt-4 border-t border-gray-200">
-                <p className="text-sm font-medium text-gray-700">Total Amount</p>
-                <p className="text-xl font-bold text-gray-900">Rs. {bookingData.totalAmount.toLocaleString()}</p>
+
+              {/* Total Amount */}
+              <div className="mt-8 pt-6 border-t border-gray-200">
+                <div className="flex justify-between items-baseline">
+                  <p className="text-base font-medium text-gray-700">Total Amount Paid</p>
+                  <p className="text-2xl font-bold text-primary-700">Rs. {bookingData.totalAmount.toLocaleString()}</p>
+                </div>
               </div>
             </div>
-            
-            <div className="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-lg p-6 mb-6">
-              <h3 className="text-lg font-semibold text-gray-900 mb-2">Time Until Your Booking</h3>
-              
+
+            {/* Enhanced Countdown Section */}
+            <div className="bg-gradient-to-r from-blue-100 to-indigo-100 rounded-xl p-6 text-center">
+              <h3 className="text-lg font-semibold text-gray-800 mb-4">Time Until Your Booking</h3>
+
               {isExpired ? (
-                <p className="text-gray-700">Your booking time has passed</p>
+                <p className="text-lg text-gray-700 font-medium">Your booking time has passed.</p>
               ) : (
-                <div className="flex space-x-4 justify-center">
-                  <div className="bg-white rounded-lg shadow px-3 py-2 w-24 text-center">
-                    <div className="text-3xl font-bold text-primary-600">{timeRemaining.hours}</div>
-                    <div className="text-xs text-gray-500 uppercase">Hours</div>
+                <div className="flex flex-wrap justify-center gap-4">
+                  {/* Countdown Box */}
+                  <div className="bg-white/70 backdrop-blur-sm rounded-lg border border-gray-200/80 px-4 py-3 w-28 text-center shadow-sm">
+                    <div className="text-4xl font-bold text-primary-600 tabular-nums">{formatTime(timeRemaining.hours)}</div>
+                    <div className="text-xs text-gray-500 uppercase tracking-wider mt-1">Hours</div>
                   </div>
-                  <div className="bg-white rounded-lg shadow px-3 py-2 w-24 text-center">
-                    <div className="text-3xl font-bold text-primary-600">{timeRemaining.minutes}</div>
-                    <div className="text-xs text-gray-500 uppercase">Minutes</div>
+                  <div className="bg-white/70 backdrop-blur-sm rounded-lg border border-gray-200/80 px-4 py-3 w-28 text-center shadow-sm">
+                    <div className="text-4xl font-bold text-primary-600 tabular-nums">{formatTime(timeRemaining.minutes)}</div>
+                    <div className="text-xs text-gray-500 uppercase tracking-wider mt-1">Minutes</div>
                   </div>
-                  <div className="bg-white rounded-lg shadow px-3 py-2 w-24 text-center">
-                    <div className="text-3xl font-bold text-primary-600">{timeRemaining.seconds}</div>
-                    <div className="text-xs text-gray-500 uppercase">Seconds</div>
+                  <div className="bg-white/70 backdrop-blur-sm rounded-lg border border-gray-200/80 px-4 py-3 w-28 text-center shadow-sm">
+                    <div className="text-4xl font-bold text-primary-600 tabular-nums">{formatTime(timeRemaining.seconds)}</div>
+                    <div className="text-xs text-gray-500 uppercase tracking-wider mt-1">Seconds</div>
                   </div>
                 </div>
               )}
             </div>
-            
-            <div className="bg-yellow-50 rounded-lg p-6 mb-6">
-              <h3 className="text-amber-800 font-medium flex items-center mb-2">
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
-                  <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clipRule="evenodd" />
-                </svg>
+
+            {/* Enhanced Important Information Section */}
+            <div className="bg-amber-50 rounded-xl p-6 border border-amber-200">
+              <h3 className="text-amber-900 font-semibold flex items-center mb-3 text-lg">
+                <InformationCircleIcon className="h-6 w-6 mr-2 text-amber-600" />
                 Important Information
               </h3>
-              <ul className="space-y-2 text-sm text-amber-700">
-                <li className="flex">
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor">
-                    <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
-                  </svg>
-                  <span>A booking confirmation has been sent to your email</span>
+              <ul className="space-y-3 text-sm text-amber-800">
+                <li className="flex items-start">
+                  <CheckCircleIcon className="h-5 w-5 mr-2 flex-shrink-0 text-amber-600 mt-0.5" />
+                  <span>A detailed booking confirmation has been sent to your registered email address.</span>
                 </li>
-                <li className="flex">
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor">
-                    <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
-                  </svg>
-                  <span>You can cancel your booking up to 24 hours before the scheduled time</span>
+                <li className="flex items-start">
+                  <CheckCircleIcon className="h-5 w-5 mr-2 flex-shrink-0 text-amber-600 mt-0.5" />
+                  <span>Cancellations are permitted up to 24 hours prior to the scheduled booking time via your profile.</span>
                 </li>
-                <li className="flex">
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor">
-                    <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
-                  </svg>
-                  <span>Please arrive 15 minutes before your booking time</span>
+                <li className="flex items-start">
+                  <CheckCircleIcon className="h-5 w-5 mr-2 flex-shrink-0 text-amber-600 mt-0.5" />
+                  <span>Please plan to arrive at the facility at least 15 minutes before your scheduled start time.</span>
                 </li>
                 {bookingData.hasTransportation && (
-                  <li className="flex">
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor">
-                      <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
-                    </svg>
-                    <span>Your transportation details will be sent 2 hours before pickup</span>
+                  <li className="flex items-start">
+                    <CheckCircleIcon className="h-5 w-5 mr-2 flex-shrink-0 text-amber-600 mt-0.5" />
+                    <span>Your transportation provider and pickup details will be confirmed via SMS/Email 2 hours before pickup.</span>
                   </li>
                 )}
               </ul>
             </div>
-            
-            <div className="flex flex-col sm:flex-row justify-center space-y-4 sm:space-y-0 sm:space-x-4">
+
+            {/* Enhanced Action Buttons */}
+            <div className="flex flex-col sm:flex-row justify-center gap-4 pt-6">
               <Link
-                href="/bookings"
-                className="inline-flex justify-center items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-primary-600 hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500"
+                href="/profile?tab=bookings" // Example: Link directly to bookings tab
+                className="inline-flex justify-center items-center px-8 py-3 border border-transparent text-base font-medium rounded-lg shadow-sm text-white bg-primary-600 hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 transition duration-150 ease-in-out"
               >
                 View My Bookings
               </Link>
               <Link
                 href="/facilities"
-                className="inline-flex justify-center items-center px-6 py-3 border border-gray-300 shadow-sm text-base font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500"
+                className="inline-flex justify-center items-center px-8 py-3 border border-gray-300 shadow-sm text-base font-medium rounded-lg text-gray-700 bg-white hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 transition duration-150 ease-in-out group"
               >
                 Book Another Facility
+                <ArrowRightIcon className="ml-2 h-5 w-5 text-gray-400 group-hover:text-gray-500 transition-colors" />
               </Link>
             </div>
           </div>

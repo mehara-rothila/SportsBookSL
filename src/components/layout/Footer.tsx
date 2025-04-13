@@ -1,3 +1,5 @@
+// src/components/layout/Footer.tsx
+
 import Link from 'next/link';
 
 const navigation = {
@@ -5,24 +7,32 @@ const navigation = {
     { name: 'Facility Booking', href: '/facilities' },
     { name: 'Trainer Booking', href: '/trainers' },
     { name: 'Equipment Rental', href: '/equipment' },
-    { name: 'Financial Aid', href: '/financial-aid' },
+    { name: 'Financial Aid', href: '/financial-aid/apply' },
+    { name: 'Donations', href: '/donations' }, // Added Donations
   ],
   support: [
     { name: 'Help Center', href: '#' },
     { name: 'Contact Us', href: '#' },
-    { name: 'FAQ', href: '#' },
-    { name: 'Privacy Policy', href: '#' },
+    { name: 'System Status', href: '#' }, // Added Status
+    { name: 'Report Issue', href: '#' }, // Added Report
   ],
   company: [
     { name: 'About Us', href: '#' },
     { name: 'Blog', href: '#' },
+    { name: 'Press', href: '#' }, // Added Press
     { name: 'Partners', href: '#' },
     { name: 'Careers', href: '#' },
   ],
+  legal: [ // Separated Legal links
+    { name: 'Privacy Policy', href: '#' },
+    { name: 'Terms of Service', href: '#' },
+    { name: 'Cookie Policy', href: '#' },
+  ],
   social: [
-    {
+    // ... (Social icons remain the same) ...
+     {
       name: 'Facebook',
-      href: '#',
+      href: '#', // Add actual social links
       icon: (props: any) => (
         <svg fill="currentColor" viewBox="0 0 24 24" {...props}>
           <path
@@ -35,7 +45,7 @@ const navigation = {
     },
     {
       name: 'Instagram',
-      href: '#',
+      href: '#', // Add actual social links
       icon: (props: any) => (
         <svg fill="currentColor" viewBox="0 0 24 24" {...props}>
           <path
@@ -48,7 +58,7 @@ const navigation = {
     },
     {
       name: 'Twitter',
-      href: '#',
+      href: '#', // Add actual social links
       icon: (props: any) => (
         <svg fill="currentColor" viewBox="0 0 24 24" {...props}>
           <path d="M8.29 20.251c7.547 0 11.675-6.253 11.675-11.675 0-.178 0-.355-.012-.53A8.348 8.348 0 0022 5.92a8.19 8.19 0 01-2.357.646 4.118 4.118 0 001.804-2.27 8.224 8.224 0 01-2.605.996 4.107 4.107 0 00-6.993 3.743 11.65 11.65 0 01-8.457-4.287 4.106 4.106 0 001.27 5.477A4.072 4.072 0 012.8 9.713v.052a4.105 4.105 0 003.292 4.022 4.095 4.095 0 01-1.853.07 4.108 4.108 0 003.834 2.85A8.233 8.233 0 012 18.407a11.616 11.616 0 006.29 1.84" />
@@ -60,63 +70,70 @@ const navigation = {
 
 export default function Footer() {
   const currentYear = new Date().getFullYear();
-  
+
   return (
-    <footer className="bg-white" aria-labelledby="footer-heading">
+    <footer className="bg-gradient-to-b from-slate-100 to-white" aria-labelledby="footer-heading"> {/* Subtle gradient */}
       <h2 id="footer-heading" className="sr-only">
         Footer
       </h2>
-      
-      {/* Top wave decoration */}
-      <div className="w-full">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320" className="w-full h-auto">
-          <path 
-            fill="#F9FAFB" 
-            fillOpacity="1" 
-            d="M0,96L48,96C96,96,192,96,288,112C384,128,480,160,576,144C672,128,768,64,864,53.3C960,43,1056,85,1152,96C1248,107,1344,85,1392,74.7L1440,64L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"
-          ></path>
-        </svg>
-      </div>
-      
-      <div className="mx-auto max-w-7xl px-6 pb-8 pt-16 sm:pt-24 lg:px-8 lg:pt-32">
-        <div className="xl:grid xl:grid-cols-3 xl:gap-8">
-          <div className="space-y-8">
-            <Link href="/" className="text-3xl font-bold text-primary-600">
-              SportsBookSL
+
+      {/* Main Content Section */}
+      <div className="mx-auto max-w-7xl px-6 pb-16 pt-24 sm:pt-32 lg:px-8 lg:pt-40"> {/* Increased padding */}
+        <div className="xl:grid xl:grid-cols-3 xl:gap-12">
+          {/* Branding & Social */}
+          <div className="space-y-10"> {/* Increased spacing */}
+            <Link href="/" className="inline-block group focus:outline-none focus:ring-2 focus:ring-offset-4 focus:ring-primary-500 rounded-lg">
+              <span className="sr-only">SportsBookSL Home</span>
+              {/* Enhanced Logo Text */}
+              <span className="text-4xl font-extrabold tracking-tight"> {/* Bolder, tighter tracking */}
+                <span className="text-primary-600 group-hover:text-primary-700 transition-colors">Sports</span>
+                <span className="text-secondary-500 group-hover:text-secondary-600 transition-colors">Book</span>
+                <span className="text-primary-600 group-hover:text-primary-700 transition-colors">SL</span>
+              </span>
             </Link>
-            <p className="text-sm leading-6 text-gray-600 max-w-xs">
-              Connecting athletes with sports facilities across Sri Lanka. 
-              Book, play, and excel with SportsBookSL's comprehensive platform.
+            <p className="text-base leading-relaxed text-slate-700 max-w-xs">
+              Your ultimate platform for discovering and booking sports facilities across Sri Lanka. Play more, manage less.
             </p>
-            <div className="flex space-x-6">
+            <div className="flex space-x-5">
               {navigation.social.map((item) => (
-                <a key={item.name} href={item.href} className="text-gray-400 hover:text-gray-500 transition-colors duration-200">
+                <a
+                  key={item.name}
+                  href={item.href}
+                  className="text-slate-400 hover:text-primary-600 transition-all duration-300 ease-in-out transform hover:scale-110 hover:-translate-y-1" // Added slight lift
+                  aria-label={item.name}
+                >
                   <span className="sr-only">{item.name}</span>
-                  <item.icon className="h-6 w-6" aria-hidden="true" />
+                  <item.icon className="h-7 w-7" aria-hidden="true" /> {/* Slightly larger icons */}
                 </a>
               ))}
             </div>
           </div>
-          <div className="mt-16 grid grid-cols-2 gap-8 xl:col-span-2 xl:mt-0">
-            <div className="md:grid md:grid-cols-2 md:gap-8">
+
+          {/* Link Columns */}
+          <div className="mt-16 grid grid-cols-2 gap-10 xl:col-span-2 xl:mt-0"> {/* Increased gap */}
+            <div className="md:grid md:grid-cols-2 md:gap-10">
+              {/* Solutions */}
               <div>
-                <h3 className="text-sm font-semibold leading-6 text-gray-900">Solutions</h3>
+                <h3 className="text-base font-semibold leading-6 text-slate-900 tracking-wide">Solutions</h3> {/* Added tracking */}
                 <ul role="list" className="mt-6 space-y-4">
                   {navigation.solutions.map((item) => (
                     <li key={item.name}>
-                      <a href={item.href} className="text-sm leading-6 text-gray-600 hover:text-primary-600 transition-colors duration-200">
+                      <Link href={item.href} className="text-sm leading-6 text-slate-600 hover:text-primary-700 hover:font-medium transition-all duration-200 ease-in-out group flex items-center">
+                         <span className="w-1.5 h-1.5 bg-primary-200 rounded-full mr-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200"></span> {/* Hover indicator */}
                         {item.name}
-                      </a>
+                      </Link>
                     </li>
                   ))}
                 </ul>
               </div>
+              {/* Support */}
               <div className="mt-10 md:mt-0">
-                <h3 className="text-sm font-semibold leading-6 text-gray-900">Support</h3>
+                <h3 className="text-base font-semibold leading-6 text-slate-900 tracking-wide">Support</h3>
                 <ul role="list" className="mt-6 space-y-4">
                   {navigation.support.map((item) => (
                     <li key={item.name}>
-                      <a href={item.href} className="text-sm leading-6 text-gray-600 hover:text-primary-600 transition-colors duration-200">
+                      <a href={item.href} className="text-sm leading-6 text-slate-600 hover:text-primary-700 hover:font-medium transition-all duration-200 ease-in-out group flex items-center">
+                        <span className="w-1.5 h-1.5 bg-primary-200 rounded-full mr-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200"></span>
                         {item.name}
                       </a>
                     </li>
@@ -124,73 +141,82 @@ export default function Footer() {
                 </ul>
               </div>
             </div>
-            <div className="md:grid md:grid-cols-2 md:gap-8">
+            <div className="md:grid md:grid-cols-2 md:gap-10">
+              {/* Company */}
               <div>
-                <h3 className="text-sm font-semibold leading-6 text-gray-900">Company</h3>
+                <h3 className="text-base font-semibold leading-6 text-slate-900 tracking-wide">Company</h3>
                 <ul role="list" className="mt-6 space-y-4">
                   {navigation.company.map((item) => (
                     <li key={item.name}>
-                      <a href={item.href} className="text-sm leading-6 text-gray-600 hover:text-primary-600 transition-colors duration-200">
+                      <a href={item.href} className="text-sm leading-6 text-slate-600 hover:text-primary-700 hover:font-medium transition-all duration-200 ease-in-out group flex items-center">
+                        <span className="w-1.5 h-1.5 bg-primary-200 rounded-full mr-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200"></span>
                         {item.name}
                       </a>
                     </li>
                   ))}
                 </ul>
               </div>
+              {/* Legal (Moved from bottom bar) */}
               <div className="mt-10 md:mt-0">
-                <h3 className="text-sm font-semibold leading-6 text-gray-900">Subscribe</h3>
-                <p className="mt-6 text-sm leading-6 text-gray-600">
-                  Stay updated with the latest facilities and sports events.
-                </p>
-                <form className="mt-6">
-                  <div className="flex gap-x-4">
-                    <label htmlFor="email-address" className="sr-only">
-                      Email address
-                    </label>
-                    <input
-                      id="email-address"
-                      name="email"
-                      type="email"
-                      autoComplete="email"
-                      required
-                      className="min-w-0 flex-auto rounded-md border-0 bg-white/5 px-3.5 py-2 text-gray-600 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-primary-500 sm:text-sm sm:leading-6"
-                      placeholder="Enter your email"
-                    />
-                    <button
-                      type="submit"
-                      className="flex-none rounded-md bg-primary-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-primary-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-500 transition-colors duration-200"
-                    >
-                      Subscribe
-                    </button>
-                  </div>
-                  <p className="mt-4 text-xs leading-5 text-gray-500">
-                    We care about your privacy. Read our{' '}
-                    <a href="#" className="font-medium text-primary-600 hover:text-primary-500">
-                      Privacy Policy
-                    </a>
-                    .
-                  </p>
-                </form>
+                 <h3 className="text-base font-semibold leading-6 text-slate-900 tracking-wide">Legal</h3>
+                 <ul role="list" className="mt-6 space-y-4">
+                   {navigation.legal.map((item) => (
+                     <li key={item.name}>
+                       <a href={item.href} className="text-sm leading-6 text-slate-600 hover:text-primary-700 hover:font-medium transition-all duration-200 ease-in-out group flex items-center">
+                         <span className="w-1.5 h-1.5 bg-primary-200 rounded-full mr-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200"></span>
+                         {item.name}
+                       </a>
+                     </li>
+                   ))}
+                 </ul>
               </div>
             </div>
           </div>
         </div>
-        <div className="mt-16 border-t border-gray-900/10 pt-8 sm:mt-20 lg:mt-24">
-          <div className="flex flex-col md:flex-row justify-between items-center">
-            <p className="text-xs leading-5 text-gray-500">
-              &copy; {currentYear} SportsBookSL. All rights reserved.
+
+        {/* Enhanced Subscribe Section - Separated Visually */}
+        <div className="mt-20 pt-16 border-t border-slate-900/10 lg:flex lg:items-center lg:justify-between">
+          <div>
+            <h3 className="text-lg font-semibold leading-6 text-slate-900">Subscribe to our newsletter</h3>
+            <p className="mt-2 text-base leading-7 text-slate-600 max-w-xl"> {/* Increased size */}
+              Get the latest updates on new facilities, special offers, and sports events delivered right to your inbox.
             </p>
-            <div className="flex space-x-6 mt-4 md:mt-0">
-              <a href="#" className="text-xs leading-5 text-gray-500 hover:text-primary-600 transition-colors duration-200">
-                Terms of Service
-              </a>
-              <a href="#" className="text-xs leading-5 text-gray-500 hover:text-primary-600 transition-colors duration-200">
-                Privacy Policy
-              </a>
-              <a href="#" className="text-xs leading-5 text-gray-500 hover:text-primary-600 transition-colors duration-200">
-                Cookie Policy
-              </a>
+          </div>
+          <form className="mt-6 lg:mt-0 lg:flex-shrink-0 lg:flex lg:items-center lg:justify-end lg:w-1/2">
+            <label htmlFor="email-address-footer-enhanced" className="sr-only">
+              Email address
+            </label>
+            <div className="relative rounded-lg shadow-sm w-full max-w-md">
+              <input
+                id="email-address-footer-enhanced"
+                name="email"
+                type="email"
+                autoComplete="email"
+                required
+                className="block w-full border-0 py-3 pl-4 pr-24 text-slate-900 ring-1 ring-inset ring-slate-300 placeholder:text-slate-400 focus:ring-2 focus:ring-inset focus:ring-primary-500 sm:text-sm sm:leading-6 rounded-lg transition duration-150 ease-in-out"
+                placeholder="Enter your email"
+              />
+              <div className="absolute inset-y-0 right-0 flex py-1.5 pr-1.5">
+                <button
+                  type="submit"
+                  className="inline-flex items-center rounded-md bg-primary-600 px-4 text-sm font-semibold text-white shadow-sm hover:bg-primary-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-600 transition-colors duration-200 ease-in-out"
+                >
+                  Notify Me
+                </button>
+              </div>
             </div>
+          </form>
+        </div>
+      </div>
+
+      {/* Bottom Bar - Darker Background */}
+      <div className="bg-slate-900 py-6">
+        <div className="mx-auto max-w-7xl px-6 lg:px-8">
+          <div className="flex items-center justify-center">
+            <p className="text-sm leading-5 text-slate-400">
+              © {currentYear} SportsBookSL Technologies (Pvt) Ltd. All rights reserved.
+            </p>
+            {/* Legal links moved up */}
           </div>
         </div>
       </div>

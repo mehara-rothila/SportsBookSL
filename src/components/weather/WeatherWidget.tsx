@@ -1,314 +1,417 @@
-// src/components/weather/WeatherWidget.tsx
-
 'use client';
 
 import { useState, useEffect } from 'react';
-import { ChevronDownIcon, SunIcon, CloudIcon, CloudRainIcon, WindIcon } from '@heroicons/react/24/outline';
-import { Disclosure, Transition } from '@headlessui/react';
 
 interface WeatherWidgetProps {
-  facilityId: string;
-  facilityName: string;
-  isOutdoor: boolean;
+  locationName: string;
+  facilityType: 'indoor' | 'outdoor';
   sportType: string;
-  bookingDate?: string;
+  bookingDate?: Date;
 }
 
-export default function WeatherWidget({ facilityId, facilityName, isOutdoor, sportType, bookingDate }: WeatherWidgetProps) {
-  const [weatherData, setWeatherData] = useState<any>(null);
+// In a real app, this would come from an API
+const mockWeatherData = {
+  current: {
+    temperature: 28,
+    humidity: 65,
+    windSpeed: 12,
+    precipitation: 0,
+    condition: 'partly-cloudy',
+    description: 'Partly Cloudy',
+    feelsLike: 30,
+    uvIndex: 7,
+    visibility: 10,
+  },
+  forecast: [
+    {
+      day: 'Today',
+      temperature: { min: 24, max: 29 },
+      condition: 'partly-cloudy',
+      precipitation: 20,
+      windSpeed: 12,
+    },
+    {
+      day: 'Tomorrow',
+      temperature: { min: 23, max: 30 },
+      condition: 'sunny',
+      precipitation: 0,
+      windSpeed: 8,
+    },
+    {
+      day: 'Wednesday',
+      temperature: { min: 25, max: 32 },
+      condition: 'sunny',
+      precipitation: 0,
+      windSpeed: 6,
+    },
+    {
+      day: 'Thursday',
+      temperature: { min: 26, max: 33 },
+      condition: 'sunny',
+      precipitation: 0,
+      windSpeed: 10,
+    },
+    {
+      day: 'Friday',
+      temperature: { min: 24, max: 29 },
+      condition: 'rain',
+      precipitation: 80,
+      windSpeed: 15,
+    },
+  ],
+  alternatives: [
+    {
+      id: 'alt-1',
+      name: 'Indoor Sports Complex',
+      distance: 3.2,
+      sportTypes: ['basketball', 'badminton', 'volleyball'],
+      availability: true,
+    },
+    {
+      id: 'alt-2',
+      name: 'National Indoor Stadium',
+      distance: 5.8,
+      sportTypes: ['tennis', 'basketball'],
+      availability: true,
+    },
+    {
+      id: 'alt-3',
+      name: 'City Sports Center',
+      distance: 7.1,
+      sportTypes: ['swimming', 'badminton'],
+      availability: false,
+    },
+  ],
+};
+
+export default function WeatherWidget({ 
+  locationName = 'Colombo', 
+  facilityType = 'outdoor', 
+  sportType = 'Cricket',
+  bookingDate
+}: WeatherWidgetProps) {
+  const [suitabilityScore, setSuitabilityScore] = useState(75);
+  const [showAlternatives, setShowAlternatives] = useState(false);
+  const [selectedDay, setSelectedDay] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
-  const [alternativeFacilities, setAlternativeFacilities] = useState<any[]>([]);
-  const [suitabilityScore, setSuitabilityScore] = useState<number>(0);
   
-  // In a real application, this would fetch from an API
+  // Simulate loading
   useEffect(() => {
-    // Mock weather data
-    setTimeout(() => {
-      setWeatherData({
-        currentConditions: {
-          temperature: 28,
-          humidity: 75,
-          windSpeed: 12,
-          precipitation: 0.2,
-          weatherCode: 'partly-cloudy',
-          description: 'Partly cloudy with a chance of rain'
-        },
-        forecast: [
-          {
-            datetime: '2025-04-13T12:00:00',
-            temperature: 29,
-            humidity: 70,
-            windSpeed: 10,
-            precipitation: 0.1,
-            weatherCode: 'partly-cloudy',
-            description: 'Partly cloudy'
-          },
-          {
-            datetime: '2025-04-13T15:00:00',
-            temperature: 30,
-            humidity: 65,
-            windSpeed: 8,
-            precipitation: 0.4,
-            weatherCode: 'rain',
-            description: 'Light rain'
-          },
-          {
-            datetime: '2025-04-13T18:00:00',
-            temperature: 27,
-            humidity: 80,
-            windSpeed: 15,
-            precipitation: 0.7,
-            weatherCode: 'rain',
-            description: 'Moderate rain'
-          }
-        ]
-      });
-      
-      // Mock alternatives
-      setAlternativeFacilities([
-        {
-          id: 'alt-1',
-          name: 'Indoor Sports Center',
-          distance: 2.5,
-          suitabilityScore: 95,
-          availabilityStatus: true,
-          imageUrl: 'https://images.unsplash.com/photo-1505666287802-931dc83a0dc4',
-          sportTypes: ['Basketball', 'Badminton', sportType],
-          price: 'Rs. 3,000/hr'
-        },
-        {
-          id: 'alt-2',
-          name: 'City Sports Complex',
-          distance: 4.8,
-          suitabilityScore: 90,
-          availabilityStatus: true,
-          imageUrl: 'https://images.unsplash.com/photo-1534860741060-ee15f0438609',
-          sportTypes: [sportType],
-          price: 'Rs. 3,500/hr'
-        }
-      ]);
-      
-      // Set suitability score - would be calculated based on weather conditions
-      setSuitabilityScore(isOutdoor ? 65 : 95);
-      
+    const timer = setTimeout(() => {
       setIsLoading(false);
     }, 1000);
-  }, [facilityId, isOutdoor, sportType]);
+    
+    return () => clearTimeout(timer);
+  }, []);
   
-  const getWeatherIcon = (weatherCode: string) => {
-    switch(weatherCode) {
+  // Calculate suitability score based on weather and sport type
+  useEffect(() => {
+    // This would be a more complex calculation in a real app
+    const forecast = mockWeatherData.forecast[selectedDay];
+    
+    if (facilityType === 'indoor') {
+      setSuitabilityScore(100);
+      return;
+    }
+    
+    let score = 100;
+    
+    // Reduce score based on precipitation chance
+    score -= forecast.precipitation * 0.8;
+    
+    // Reduce score based on wind speed for certain sports
+    if (['Cricket', 'Badminton', 'Tennis'].includes(sportType)) {
+      score -= forecast.windSpeed * 2;
+    }
+    
+    // Temperature factors
+    const avgTemp = (forecast.temperature.min + forecast.temperature.max) / 2;
+    if (avgTemp > 35 || avgTemp < 15) {
+      score -= 20;
+    }
+    
+    // Ensure score is in 0-100 range
+    score = Math.max(0, Math.min(100, score));
+    setSuitabilityScore(Math.round(score));
+  }, [facilityType, sportType, selectedDay]);
+  
+  const getSuitabilityColor = (score: number) => {
+    if (score >= 80) return 'text-green-500';
+    if (score >= 60) return 'text-yellow-500';
+    return 'text-red-500';
+  };
+  
+  const getConditionIcon = (condition: string) => {
+    switch (condition) {
       case 'sunny':
-        return <SunIcon className="h-8 w-8 text-amber-500" />;
+        return (
+          <svg className="w-full h-full" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="12" cy="12" r="5" fill="#FDB813" stroke="#FDB813" strokeWidth="2" />
+            <path d="M12 3V2M12 22V21M3 12H2M22 12H21M18.364 5.636L17.657 6.343M6.343 17.657L5.636 18.364M18.364 18.364L17.657 17.657M6.343 6.343L5.636 5.636" 
+              stroke="#FDB813" strokeWidth="2" strokeLinecap="round" />
+          </svg>
+        );
       case 'partly-cloudy':
-        return <CloudIcon className="h-8 w-8 text-gray-400" />;
+        return (
+          <svg className="w-full h-full" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="8" cy="9" r="3" fill="#FDB813" stroke="#FDB813" strokeWidth="2" />
+            <path d="M8 4V3M3 9H2M14 9H13M5.172 6.172L4.464 5.464M11.536 5.464L10.828 6.172" 
+              stroke="#FDB813" strokeWidth="2" strokeLinecap="round" />
+            <path d="M3 16.5C3 14.015 5.015 12 7.5 12H13.5C15.985 12 18 14.015 18 16.5C18 18.985 15.985 21 13.5 21H7.5C5.015 21 3 18.985 3 16.5Z" 
+              fill="#DBEAFE" stroke="#93C5FD" strokeWidth="2" />
+          </svg>
+        );
+      case 'cloudy':
+        return (
+          <svg className="w-full h-full" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M3 15.5C3 13.015 5.015 11 7.5 11H16.5C18.985 11 21 13.015 21 15.5C21 17.985 18.985 20 16.5 20H7.5C5.015 20 3 17.985 3 15.5Z" 
+              fill="#DBEAFE" stroke="#93C5FD" strokeWidth="2" />
+            <path d="M7 11C7 8.79086 8.79086 7 11 7H13C15.2091 7 17 8.79086 17 11" 
+              stroke="#93C5FD" strokeWidth="2" />
+          </svg>
+        );
       case 'rain':
-        return <CloudRainIcon className="h-8 w-8 text-blue-500" />;
+        return (
+          <svg className="w-full h-full" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M3 13.5C3 11.015 5.015 9 7.5 9H16.5C18.985 9 21 11.015 21 13.5C21 15.985 18.985 18 16.5 18H7.5C5.015 18 3 15.985 3 13.5Z" 
+              fill="#DBEAFE" stroke="#93C5FD" strokeWidth="2" />
+            <path d="M8 18L7 21M12 18L11 21M16 18L15 21" 
+              stroke="#3B82F6" strokeWidth="2" strokeLinecap="round" />
+          </svg>
+        );
       default:
-        return <CloudIcon className="h-8 w-8 text-gray-400" />;
+        return (
+          <svg className="w-full h-full" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="12" cy="12" r="5" fill="#FDB813" stroke="#FDB813" strokeWidth="2" />
+          </svg>
+        );
     }
   };
   
-  if (isLoading) {
-    return (
-      <div className="animate-pulse bg-gray-50 rounded-lg p-6">
-        <div className="h-8 bg-gray-200 rounded w-1/3 mb-4"></div>
-        <div className="h-24 bg-gray-200 rounded mb-4"></div>
-        <div className="h-32 bg-gray-200 rounded"></div>
-      </div>
-    );
-  }
-  
-  if (!isOutdoor) {
-    return (
-      <div className="bg-green-50 rounded-lg p-4 mb-6">
-        <div className="flex items-center">
-          <div className="bg-green-100 p-2 rounded-full mr-4">
-            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-            </svg>
-          </div>
+  return (
+    <div className="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-xl shadow-lg overflow-hidden">
+      {/* Header with location and suitability score */}
+      <div className="bg-gradient-to-r from-blue-600 to-indigo-600 p-4 sm:p-6">
+        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center">
           <div>
-            <h3 className="text-lg font-medium text-green-800">Indoor Facility</h3>
-            <p className="text-sm text-green-600">This facility is not affected by weather conditions.</p>
+            <h2 className="text-white text-xl font-bold flex items-center">
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+              </svg>
+              {locationName}
+            </h2>
+            <p className="text-blue-100 text-sm mt-1">
+              {facilityType === 'indoor' ? 'Indoor Facility' : 'Outdoor Facility'} • {sportType}
+            </p>
+          </div>
+          
+          <div className="mt-4 sm:mt-0 w-full sm:w-auto flex flex-col items-start sm:items-end">
+            <p className="text-blue-100 text-sm font-medium">Suitability Score</p>
+            <div className="mt-1 w-full sm:w-auto bg-white/20 rounded-full h-4 relative backdrop-blur-sm overflow-hidden">
+              <div 
+                className={`h-full rounded-full ${
+                  suitabilityScore >= 80 
+                    ? 'bg-green-500' 
+                    : suitabilityScore >= 60 
+                      ? 'bg-yellow-500' 
+                      : 'bg-red-500'
+                }`}
+                style={{ width: `${suitabilityScore}%` }}
+              >
+                <div className="absolute top-0 left-0 right-0 bottom-0 flex items-center justify-center">
+                  <span className="text-xs font-bold text-white drop-shadow-md">{suitabilityScore}%</span>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
-    );
-  }
-  
-  return (
-    <div className="bg-white rounded-lg shadow-sm border border-gray-100 overflow-hidden mb-6">
-      <div className="p-6">
-        <h3 className="text-lg font-semibold text-gray-900 mb-2">Weather Conditions</h3>
-        
-        <div className="flex flex-col md:flex-row md:items-center justify-between mb-4">
-          <div className="flex items-center mb-3 md:mb-0">
-            {getWeatherIcon(weatherData.currentConditions.weatherCode)}
-            <div className="ml-3">
-              <p className="text-2xl font-bold text-gray-800">{weatherData.currentConditions.temperature}°C</p>
-              <p className="text-sm text-gray-600">{weatherData.currentConditions.description}</p>
+      
+      {isLoading ? (
+        // Loading skeleton
+        <div className="p-6 animate-pulse">
+          <div className="flex items-center justify-between mb-8">
+            <div className="w-28 h-28 rounded-full bg-gray-300"></div>
+            <div className="w-2/3">
+              <div className="h-8 bg-gray-300 rounded mb-4"></div>
+              <div className="h-4 bg-gray-300 rounded w-1/2 mb-2"></div>
+              <div className="h-4 bg-gray-300 rounded w-3/4"></div>
+            </div>
+          </div>
+          <div className="grid grid-cols-5 gap-2">
+            {[...Array(5)].map((_, i) => (
+              <div key={i} className="space-y-2">
+                <div className="h-5 bg-gray-300 rounded"></div>
+                <div className="h-16 bg-gray-300 rounded"></div>
+              </div>
+            ))}
+          </div>
+        </div>
+      ) : (
+        <div>
+          {/* Current weather and details */}
+          <div className="p-4 sm:p-6">
+            <div className="flex flex-col sm:flex-row items-center sm:items-start space-y-4 sm:space-y-0 sm:space-x-6">
+              {/* Main weather icon and temperature */}
+              <div 
+                className={`relative flex-shrink-0 w-28 h-28 rounded-full ${
+                  mockWeatherData.current.condition === 'sunny' || mockWeatherData.current.condition === 'partly-cloudy'
+                    ? 'bg-gradient-to-br from-yellow-300 to-amber-500' 
+                    : mockWeatherData.current.condition === 'rain'
+                      ? 'bg-gradient-to-br from-blue-400 to-blue-600' 
+                      : 'bg-gradient-to-br from-gray-300 to-gray-500'
+                } shadow-lg flex items-center justify-center p-2 transform transition-transform hover:scale-105 duration-300`}
+              >
+                <div className="w-16 h-16 text-white">
+                  {getConditionIcon(mockWeatherData.current.condition)}
+                </div>
+                <div className="absolute -bottom-2 -right-2 bg-white/90 backdrop-blur-sm text-gray-800 rounded-full text-xs font-semibold px-2 py-1 shadow-md">
+                  {facilityType === 'indoor' ? 'INDOOR' : 'OUTDOOR'}
+                </div>
+              </div>
+              
+              <div className="text-center sm:text-left flex-grow">
+                <h3 className="text-3xl sm:text-4xl font-bold text-gray-800">
+                  {mockWeatherData.current.temperature}°C
+                  <span className="text-gray-500 text-lg font-normal ml-2">
+                    Feels like {mockWeatherData.current.feelsLike}°C
+                  </span>
+                </h3>
+                <p className="text-gray-600 text-lg mt-1">{mockWeatherData.current.description}</p>
+                
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mt-4 text-sm">
+                  <div className="flex flex-col items-center sm:items-start">
+                    <span className="text-gray-500">Humidity</span>
+                    <span className="font-medium text-gray-700">{mockWeatherData.current.humidity}%</span>
+                  </div>
+                  <div className="flex flex-col items-center sm:items-start">
+                    <span className="text-gray-500">Wind</span>
+                    <span className="font-medium text-gray-700">{mockWeatherData.current.windSpeed} km/h</span>
+                  </div>
+                  <div className="flex flex-col items-center sm:items-start">
+                    <span className="text-gray-500">Precipitation</span>
+                    <span className="font-medium text-gray-700">{mockWeatherData.current.precipitation}%</span>
+                  </div>
+                  <div className="flex flex-col items-center sm:items-start">
+                    <span className="text-gray-500">UV Index</span>
+                    <span className="font-medium text-gray-700">{mockWeatherData.current.uvIndex} of 10</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            {/* 5-day forecast */}
+            <div className="mt-8">
+              <h4 className="text-sm font-medium text-gray-500 mb-4">5-Day Forecast</h4>
+              <div className="grid grid-cols-5 gap-2">
+                {mockWeatherData.forecast.map((day, index) => (
+                  <button
+                    key={index}
+                    className={`p-3 rounded-lg transition-all duration-300 hover:shadow-md ${
+                      selectedDay === index 
+                        ? 'bg-blue-100 border-2 border-blue-500' 
+                        : 'bg-white/60 hover:bg-white border-2 border-transparent'
+                    }`}
+                    onClick={() => setSelectedDay(index)}
+                  >
+                    <div className="text-center">
+                      <p className={`text-sm font-medium ${selectedDay === index ? 'text-blue-700' : 'text-gray-700'}`}>
+                        {day.day}
+                      </p>
+                      <div className="w-10 h-10 mx-auto my-2">
+                        {getConditionIcon(day.condition)}
+                      </div>
+                      <div className="flex justify-center space-x-2 text-xs">
+                        <span className="font-semibold text-gray-900">{day.temperature.max}°</span>
+                        <span className="text-gray-500">{day.temperature.min}°</span>
+                      </div>
+                      <div className="mt-1 text-xs text-gray-500 flex justify-center space-x-1">
+                        <span>{day.precipitation}%</span>
+                        <svg xmlns="http://www.w3.org/2000/svg" className="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 14l-7 7m0 0l-7-7m7 7V3" />
+                        </svg>
+                      </div>
+                    </div>
+                  </button>
+                ))}
+              </div>
             </div>
           </div>
           
-          <div className="grid grid-cols-3 gap-4">
-            <div className="text-center">
-              <div className="flex items-center justify-center bg-blue-50 rounded-full h-10 w-10 mx-auto mb-1">
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 14l-7 7m0 0l-7-7m7 7V3" />
-                </svg>
-              </div>
-              <p className="text-xs text-gray-500">Precipitation</p>
-              <p className="font-medium">{weatherData.currentConditions.precipitation} mm</p>
-            </div>
-            
-            <div className="text-center">
-              <div className="flex items-center justify-center bg-blue-50 rounded-full h-10 w-10 mx-auto mb-1">
-                <WindIcon className="h-6 w-6 text-blue-600" />
-              </div>
-              <p className="text-xs text-gray-500">Wind</p>
-              <p className="font-medium">{weatherData.currentConditions.windSpeed} km/h</p>
-            </div>
-            
-            <div className="text-center">
-              <div className="flex items-center justify-center bg-blue-50 rounded-full h-10 w-10 mx-auto mb-1">
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16V4m0 0L3 8m4-4l4 4m6 0v12m0 0l4-4m-4 4l-4-4" />
-                </svg>
-              </div>
-              <p className="text-xs text-gray-500">Humidity</p>
-              <p className="font-medium">{weatherData.currentConditions.humidity}%</p>
-            </div>
-          </div>
-        </div>
-        
-        <div className={`rounded-lg p-4 mb-4 ${
-          suitabilityScore >= 80 ? 'bg-green-50 border border-green-100' :
-          suitabilityScore >= 50 ? 'bg-yellow-50 border border-yellow-100' :
-          'bg-red-50 border border-red-100'
-        }`}>
-          <div className="flex items-center">
-            <div className={`rounded-full h-12 w-12 flex items-center justify-center ${
-              suitabilityScore >= 80 ? 'bg-green-100 text-green-600' :
-              suitabilityScore >= 50 ? 'bg-yellow-100 text-yellow-600' :
-              'bg-red-100 text-red-600'
-            }`}>
-              <span className="font-bold">{suitabilityScore}%</span>
-            </div>
-            <div className="ml-4">
-              <h4 className={`font-medium ${
-                suitabilityScore >= 80 ? 'text-green-800' :
-                suitabilityScore >= 50 ? 'text-yellow-800' :
-                'text-red-800'
-              }`}>
-                {suitabilityScore >= 80 ? 'Excellent Playing Conditions' :
-                 suitabilityScore >= 50 ? 'Acceptable Playing Conditions' :
-                 'Poor Playing Conditions'}
-              </h4>
-              <p className={`text-sm ${
-                suitabilityScore >= 80 ? 'text-green-600' :
-                suitabilityScore >= 50 ? 'text-yellow-600' :
-                'text-red-600'
-              }`}>
-                {suitabilityScore >= 80 ? 'Weather is perfect for playing ' + sportType :
-                 suitabilityScore >= 50 ? 'Weather might affect gameplay, but still playable' :
-                 'Weather conditions may significantly impact gameplay'}
-              </p>
-            </div>
-          </div>
-        </div>
-        
-        <Disclosure>
-          {({ open }) => (
-            <>
-              <Disclosure.Button className="flex w-full justify-between rounded-lg bg-gray-50 px-4 py-3 text-left text-sm font-medium text-gray-900 hover:bg-gray-100 focus:outline-none focus-visible:ring focus-visible:ring-primary-500 focus-visible:ring-opacity-75">
-                <span>Weather Forecast</span>
-                <ChevronDownIcon
-                  className={`${
-                    open ? 'rotate-180 transform' : ''
-                  } h-5 w-5 text-gray-500`}
-                />
-              </Disclosure.Button>
-              <Transition
-                enter="transition duration-100 ease-out"
-                enterFrom="transform scale-95 opacity-0"
-                enterTo="transform scale-100 opacity-100"
-                leave="transition duration-75 ease-out"
-                leaveFrom="transform scale-100 opacity-100"
-                leaveTo="transform scale-95 opacity-0"
-              >
-                <Disclosure.Panel className="px-4 pt-4 pb-2">
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    {weatherData.forecast.map((forecast: any, index: number) => (
-                      <div 
-                        key={index} 
-                        className="bg-gray-50 rounded-lg p-4 text-center"
-                      >
-                        <p className="text-sm font-medium text-gray-700 mb-2">
-                          {new Date(forecast.datetime).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}
-                        </p>
-                        <div className="flex justify-center mb-2">
-                          {getWeatherIcon(forecast.weatherCode)}
-                        </div>
-                        <p className="text-xl font-bold text-gray-800">{forecast.temperature}°C</p>
-                        <p className="text-xs text-gray-500 mt-1">{forecast.description}</p>
-                        <div className="mt-2 flex justify-between text-xs text-gray-500">
-                          <span>💧 {forecast.precipitation}mm</span>
-                          <span>💨 {forecast.windSpeed}km/h</span>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </Disclosure.Panel>
-              </Transition>
-            </>
-          )}
-        </Disclosure>
-      </div>
-      
-      {suitabilityScore < 70 && alternativeFacilities.length > 0 && (
-        <div className="border-t border-gray-200">
-          <div className="p-6">
-            <h3 className="text-base font-semibold text-gray-900 mb-3">Indoor Alternatives</h3>
-            <p className="text-sm text-gray-600 mb-4">
-              Due to weather conditions, consider these indoor facilities for your {sportType} session:
-            </p>
-            
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              {alternativeFacilities.map((facility) => (
-                <div 
-                  key={facility.id}
-                  className="border border-gray-200 rounded-lg overflow-hidden flex hover:shadow-md transition-shadow duration-200"
-                >
-                  <div className="w-24 h-auto bg-cover bg-center" style={{ backgroundImage: `url(${facility.imageUrl})` }}></div>
-                  <div className="flex-1 p-3">
-                    <div className="flex justify-between items-start">
-                      <h4 className="font-medium text-gray-900">{facility.name}</h4>
-                      <span className="bg-green-100 text-green-800 text-xs font-medium px-2 py-0.5 rounded-full">
-                        {facility.suitabilityScore}%
-                      </span>
-                    </div>
-                    <p className="text-xs text-gray-500 mt-1">{facility.distance} km away</p>
-                    <div className="mt-2 flex items-center justify-between">
-                      <div className="flex flex-wrap gap-1">
-                        {facility.sportTypes.map((sport: string, i: number) => (
-                          <span 
-                            key={i}
-                            className="inline-block bg-primary-50 text-primary-700 text-xs px-1.5 py-0.5 rounded"
-                          >
-                            {sport}
-                          </span>
-                        ))}
-                      </div>
-                      <span className="text-xs font-medium">{facility.price}</span>
-                    </div>
-                  </div>
+          {/* Recommendations section */}
+          <div>
+            <div className="px-6 py-4 bg-gradient-to-r from-indigo-50 to-blue-50 border-t border-b border-blue-100">
+              <div className="flex justify-between items-center">
+                <div className="flex items-center">
+                  <div className={`w-3 h-3 rounded-full ${getSuitabilityColor(suitabilityScore)} mr-2`}></div>
+                  <h4 className="font-medium text-gray-800">
+                    {suitabilityScore >= 80 
+                      ? 'Excellent conditions for your sport!' 
+                      : suitabilityScore >= 60 
+                        ? 'Acceptable conditions, but be prepared' 
+                        : 'Poor conditions - consider alternatives'}
+                  </h4>
                 </div>
-              ))}
+                {facilityType === 'outdoor' && suitabilityScore < 80 && (
+                  <button 
+                    onClick={() => setShowAlternatives(!showAlternatives)}
+                    className="text-blue-600 text-sm font-medium hover:text-blue-800 flex items-center"
+                  >
+                    {showAlternatives ? 'Hide Alternatives' : 'View Indoor Alternatives'}
+                    <svg 
+                      xmlns="http://www.w3.org/2000/svg" 
+                      className={`h-4 w-4 ml-1 transition-transform duration-300 ${showAlternatives ? 'rotate-180' : ''}`} 
+                      fill="none" 
+                      viewBox="0 0 24 24" 
+                      stroke="currentColor"
+                    >
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                    </svg>
+                  </button>
+                )}
+              </div>
             </div>
             
-            <button className="mt-4 w-full rounded-md bg-primary-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-primary-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-600">
-              Browse All Indoor Alternatives
-            </button>
+            {/* Alternative facilities section */}
+            {showAlternatives && (
+              <div className="p-4 sm:p-6 bg-white/70 backdrop-blur-sm animate-slide-down">
+                <h4 className="text-sm font-medium text-gray-500 mb-4">Recommended Indoor Alternatives</h4>
+                <div className="space-y-3">
+                  {mockWeatherData.alternatives.map((alt) => (
+                    <div 
+                      key={alt.id} 
+                      className={`p-4 rounded-lg border ${alt.availability ? 'border-green-200 bg-green-50' : 'border-gray-200 bg-gray-50'} hover:shadow-md transition-all duration-300`}
+                    >
+                      <div className="flex justify-between items-start">
+                        <div>
+                          <h5 className="font-medium text-gray-900">{alt.name}</h5>
+                          <p className="text-sm text-gray-600 mt-1">
+                            {alt.sportTypes.join(', ')} • {alt.distance} km away
+                          </p>
+                        </div>
+                        {alt.availability ? (
+                          <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                            Available
+                          </span>
+                        ) : (
+                          <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800">
+                            Booked
+                          </span>
+                        )}
+                      </div>
+                      {alt.availability && (
+                        <div className="mt-3 text-right">
+                          <button className="text-blue-600 text-sm font-medium hover:text-blue-800">
+                            Book Instead
+                          </button>
+                        </div>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
           </div>
         </div>
       )}
