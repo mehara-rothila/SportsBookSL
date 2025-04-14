@@ -8,7 +8,7 @@ const categories = [
     id: 'cricket',
     name: 'Cricket',
     href: '/facilities?sport=cricket',
-    imageSrc: 'https://images.unsplash.com/photo-1531415074968-036ba1b575da',
+    imageSrc: '/images/sports/photo-1531415074968-036ba1b575da.jpg',
     description: 'Find cricket grounds, practice nets, and indoor facilities',
     icon: (
       <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" className="w-6 h-6">
@@ -20,7 +20,7 @@ const categories = [
     id: 'football',
     name: 'Football',
     href: '/facilities?sport=football',
-    imageSrc: 'https://images.unsplash.com/photo-1575361204480-aadea25e6e68',
+    imageSrc: '/images/sports/photo-1575361204480-aadea25e6e68.jpg',
     description: 'Discover football grounds and futsal courts',
     icon: (
       <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" className="w-6 h-6">
@@ -32,7 +32,7 @@ const categories = [
     id: 'swimming',
     name: 'Swimming',
     href: '/facilities?sport=swimming',
-    imageSrc: 'https://images.unsplash.com/photo-1600965962323-6364f9754910',
+    imageSrc: '/images/sports/tilly-jensen-F20aPGvyhrQ-unsplash.jpg',
     description: 'Book swimming pools and training facilities',
     icon: (
       <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" className="w-6 h-6">
@@ -44,7 +44,7 @@ const categories = [
     id: 'tennis',
     name: 'Tennis',
     href: '/facilities?sport=tennis',
-    imageSrc: 'https://images.unsplash.com/photo-1595435934249-5df7ed86e1c0',
+    imageSrc: '/images/sports/photo-1595435934249-5df7ed86e1c0.jpg',
     description: 'Reserve tennis courts and practice areas',
     icon: (
       <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" className="w-6 h-6">
@@ -56,7 +56,7 @@ const categories = [
     id: 'badminton',
     name: 'Badminton',
     href: '/facilities?sport=badminton',
-    imageSrc: 'https://images.unsplash.com/photo-1613918944659-83721b7b8f22',
+    imageSrc: '/images/sports/muktasim-azlan-rjWfNR_AC5g-unsplash.jpg',
     description: 'Find badminton courts and training facilities',
     icon: (
       <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" className="w-6 h-6">
@@ -68,7 +68,7 @@ const categories = [
     id: 'basketball',
     name: 'Basketball',
     href: '/facilities?sport=basketball',
-    imageSrc: 'https://images.unsplash.com/photo-1627627256672-027a4613d028',
+    imageSrc: '/images/sports/photo-1627627256672-027a4613d028.jpg',
     description: 'Book basketball courts and practice areas',
     icon: (
       <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" className="w-6 h-6">
