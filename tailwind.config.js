@@ -67,13 +67,16 @@ module.exports = {
         blob: 'blob 7s infinite',
         // For subtle pulsing effects (optional)
         'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
-         // For Ken Burns effect on Hero images
+        // For Ken Burns effect on Hero images
         'ken-burns': 'ken-burns 20s ease-out infinite',
-        // Fade-in animations (optional, useful for entry effects)
+        // Fade-in animations
         'fade-in-down': 'fade-in-down 0.6s ease-out forwards',
         'fade-in-up': 'fade-in-up 0.6s ease-out forwards',
-        // Gradient animation (optional)
+        'fade-in': 'fade-in 0.6s ease-out', // Added for booking page
+        // Gradient animation
         'gradient-x': 'gradient-x 15s ease infinite',
+        // Subtle bounce animation - needed for booking page
+        'bounce-subtle': 'bounce-subtle 4s ease-in-out infinite',
       },
       keyframes: {
         // Keyframes for the 'blob' animation
@@ -106,6 +109,16 @@ module.exports = {
           '0%': { opacity: '0', transform: 'translateY(10px)' },
           '100%': { opacity: '1', transform: 'translateY(0)' },
         },
+        // Keyframes for standard fade-in - needed for booking page
+        'fade-in': {
+          '0%': { opacity: '0', transform: 'translateY(10px)' },
+          '100%': { opacity: '1', transform: 'translateY(0)' },
+        },
+        // Keyframes for bounce-subtle - needed for booking page
+        'bounce-subtle': {
+          '0%, 100%': { transform: 'translateY(0)' },
+          '50%': { transform: 'translateY(-8px)' },
+        },
         // Keyframes for gradient animation
         'gradient-x': {
           '0%, 100%': { backgroundPosition: '0% 50%' },
@@ -113,25 +126,15 @@ module.exports = {
         },
       },
 
+      // --- Define Custom Background Size for Gradients ---
+      backgroundSize: {
+        '200%': '200% 200%',
+      },
+
       // --- Define Custom Font Families (Optional) ---
       // fontFamily: {
       //   sans: ['Inter', 'ui-sans-serif', 'system-ui', ...], // Example using Inter font
       // },
-
-      // --- Define Custom Animation Delays (Optional - Requires Plugin or Manual CSS) ---
-      // If using a plugin like 'tailwindcss-animation-delay', you might configure it here or use classes directly.
-      // If not using a plugin, you'd typically add delay utilities manually if needed frequently.
-      // Example (if plugin installed):
-      // animationDelay: {
-      //   '100': '100ms',
-      //   '200': '200ms',
-      //   '300': '300ms',
-      //   '500': '500ms',
-      //   '700': '700ms',
-      //   '1000': '1000ms',
-      //   '2000': '2000ms',
-      //   '4000': '4000ms',
-      // }
     },
   },
   plugins: [
@@ -139,7 +142,18 @@ module.exports = {
     require('@tailwindcss/forms'),           // Provides base styles for form elements
     require('@tailwindcss/aspect-ratio'),    // For maintaining aspect ratios (e.g., images/videos)
     require('@tailwindcss/typography'),      // For styling blocks of prose (like in descriptions)
-    // Optional: Plugin for animation delays if you prefer utility classes
-    // require('tailwindcss-animation-delay'),
+    
+    // Custom plugin for animation delays - needed for booking page
+    function({ addUtilities }) {
+      const newUtilities = {
+        '.animation-delay-2000': {
+          'animation-delay': '2s',
+        },
+        '.animation-delay-4000': {
+          'animation-delay': '4s',
+        },
+      }
+      addUtilities(newUtilities)
+    }
   ],
 };
