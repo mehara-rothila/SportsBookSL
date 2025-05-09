@@ -2,6 +2,8 @@
 
 Sports Facility Booking Platform for Sri Lanka
 
+🌐 **Live Site**: [https://spiritx.mehara.io/](https://spiritx.mehara.io/)
+
 ## 📋 Overview
 
 SportsBookSL is a comprehensive sports facility booking platform for Sri Lanka, allowing users to book sports facilities, equipment, and trainers across the country.
@@ -170,14 +172,17 @@ export default api;
 
 ## 🌦️ AI-Powered Weather Assistant
 
-The platform features an intelligent weather assistant that combines:
+SportsBookSL features an innovative AI-powered weather assistant that revolutionizes how users plan their sports activities:
 
-- **OpenWeather API**: Real-time weather data for all outdoor facilities
-- **Google Gemini AI**: Advanced analysis of weather patterns to provide recommendations
-- **Facility-Specific Intelligence**: Customized recommendations based on facility type and sport requirements
-- **Alternative Suggestions**: When weather conditions are unfavorable, the system suggests suitable indoor alternatives
+- **Real-time Weather Intelligence**: Combines OpenWeather API data with Google's Gemini AI to provide smart weather analysis
+- **Sport-Specific Recommendations**: Analyzes weather conditions based on specific sport requirements (e.g., wind conditions for cricket vs. tennis)
+- **Predictive Booking Advice**: Suggests optimal booking times based on weather forecasts and historical patterns
+- **Facility Compatibility Analysis**: Evaluates weather conditions against facility specifications
+- **Intelligent Alternatives**: When conditions are unfavorable, automatically suggests indoor facilities or better time slots
+- **Visual Weather Insights**: Presents weather data with intuitive visualizations and clear recommendations
+- **Natural Language Explanations**: Uses AI to explain weather conditions and their impact in plain language
 
-The weather assistant helps users make informed decisions about their bookings based on current and forecasted weather conditions, enhancing the overall user experience and ensuring that sports activities are not interrupted by unexpected weather changes.
+The weather assistant enhances the user experience by reducing weather-related booking disruptions and helping athletes make informed decisions about their sports activities.
 
 ## 🔐 Environment Variables
 
