@@ -70,6 +70,18 @@ export const register = async (userData: any): Promise<AuthResponse> => {
       localStorage.setItem(USER_INFO_KEY, JSON.stringify(userInfo));
       logUserInfo(userInfo, "register-saved");
       console.log("Token stored after registration");
+      
+      // Dispatch a custom event to notify components about registration
+      // This event will be processed by Header.tsx to update UI immediately
+      if (typeof window !== 'undefined') {
+        try {
+          const loginEvent = new Event('user-login');
+          window.dispatchEvent(loginEvent);
+          console.log("Login event dispatched from registration");
+        } catch (eventError) {
+          console.error("Error dispatching login event:", eventError);
+        }
+      }
     } else {
         console.warn("Registration response did not contain a token.");
     }
