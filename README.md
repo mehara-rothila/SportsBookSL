@@ -2,7 +2,7 @@
 
 Sports Facility Booking Platform for Sri Lanka
 
-🌐 **Live Site**: [https://spiritx.mehara.io/](https://spiritx.mehara.io/)
+🌐 **Live Site**: <a href="https://spiritx.mehara.io/" target="_blank">https://spiritx.mehara.io/</a>
 
 ## 📋 Overview
 
