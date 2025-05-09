@@ -91,8 +91,8 @@ SportsBookSL-front/
 
 1. Clone the repository:
    ```bash
-   git clone <repository-url>
-   cd SportsBookSL-front
+   git clone https://github.com/mehara-rothila/SportsBookSL.git
+   cd SportsBookSL
    ```
 
 2. Install dependencies:
